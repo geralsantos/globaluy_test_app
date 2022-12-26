@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "212320065549",
+    "project_id": "black-diorama-174217",
+    "storage_bucket": "black-diorama-174217.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212320065549:android:591a2f8ea5e700ef135d44",
+        "android_client_info": {
+          "package_name": "com.example.globaluy_test_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212320065549-efpd78ua3gdml0q9uliqja59ki4fimlj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVD5dWBXmMiVYGdPES6DbYkl9KfiUzGQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212320065549-efpd78ua3gdml0q9uliqja59ki4fimlj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
