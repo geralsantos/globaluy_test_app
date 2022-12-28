@@ -22,13 +22,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _indicator(bool isActive) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 150),
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      duration: const Duration(milliseconds: 150),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       height: 8.0,
       width: isActive ? 24.0 : 16.0,
       decoration: BoxDecoration(
-        color: isActive ? Colors.white : Color(0xFF7B51D3),
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+        color: isActive ? Colors.white : const Color(0xFF7B51D3),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
     );
   }
@@ -61,20 +61,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           child: Padding(
-            padding: EdgeInsets.only(top: 40.0),
+            padding: const EdgeInsets.only(top: 40.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Container(
-                  decoration: BoxDecoration(),
+                  decoration: const BoxDecoration(),
                   alignment: Alignment.centerRight,
                   child: FlatButton(
                     onPressed: () {
                       login();
                     },
-                    child: Text(
+                    child: const Text(
                       'Omitir',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 15.0,
                       ),
@@ -82,12 +82,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       // border: Border.all(),
                       ),
                   height: size.height - 150,
                   child: PageView(
-                    physics: ClampingScrollPhysics(),
+                    physics: const ClampingScrollPhysics(),
                     controller: _pageController,
                     onPageChanged: (int page) {
                       setState(() {
@@ -97,12 +97,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     children: <Widget>[
                       SingleChildScrollView(
                         child: Padding(
-                          padding: EdgeInsets.all(40.0),
+                          padding: const EdgeInsets.all(40.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Container(
                                 height: 220,
+                                padding: const EdgeInsets.only(bottom: 10.0),
                                 child: const Image(
                                   image: AssetImage(
                                     'lib/resources/images/onboarding-3.png',
@@ -110,10 +111,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   height: 200.0,
                                   width: 300.0,
                                 ),
-                                padding: const EdgeInsets.only(bottom: 10.0),
                               ),
                               Text(
-                                'Crea y envía link de pago a tus clientes fácilmente',
+                                'Optimiza costos en productos',
                                 textAlign: TextAlign.center,
                                 style: kTitleStyle,
                               )
@@ -123,12 +123,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                       SingleChildScrollView(
                         child: Padding(
-                          padding: EdgeInsets.all(40.0),
+                          padding: const EdgeInsets.all(40.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Container(
                                 height: 220,
+                                padding: const EdgeInsets.only(bottom: 10.0),
                                 child: const Image(
                                   image: AssetImage(
                                     'lib/resources/images/onboarding-2.png',
@@ -136,10 +137,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   height: 200.0,
                                   width: 300.0,
                                 ),
-                                padding: const EdgeInsets.only(bottom: 10.0),
                               ),
                               Text(
-                                'Cobra con POS Virtual y QR de manera práctica',
+                                'Gestiona los recursos en un solo punto',
                                 textAlign: TextAlign.center,
                                 style: kTitleStyle,
                               )
@@ -149,12 +149,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                       SingleChildScrollView(
                         child: Padding(
-                          padding: EdgeInsets.all(40.0),
+                          padding: const EdgeInsets.all(40.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Container(
                                 height: 220,
+                                padding: const EdgeInsets.only(bottom: 10.0),
                                 child: const Image(
                                   image: AssetImage(
                                     'lib/resources/images/onboarding-1.png',
@@ -162,10 +163,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   height: 200.0,
                                   width: 300.0,
                                 ),
-                                padding: const EdgeInsets.only(bottom: 10.0),
                               ),
                               Text(
-                                'Visualiza tus transacciones en tiempo real',
+                                'Gestiona mejor los tiempos de distribución de productos',
                                 textAlign: TextAlign.center,
                                 style: kTitleStyle,
                               )
@@ -230,7 +230,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   },
                   child: Container(
                     decoration: BoxDecoration(border: Border.all()),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Iniciar sesión',
                         style: TextStyle(
@@ -242,7 +242,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ),
                   )))
-          : Text(''),
+          : const Text(''),
     );
   }
 }

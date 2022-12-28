@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:globaluy_test_app/app/controller/NavigationController.dart';
 
 import 'package:globaluy_test_app/pages/dashboard/Index.dart';
+import 'package:globaluy_test_app/pages/request_products/Index.dart';
 import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
 import 'package:globaluy_test_app/utils/flutter/DialogLoading.dart';
 
@@ -16,7 +19,7 @@ class IndexApp extends StatefulWidget {
 class _IndexAppState extends State<IndexApp> {
   bool permission = false;
   PageController pageController = PageController(initialPage: 1);
-
+  NavigationController navigation_controller = NavigationController();
   void initAsync(BuildContext context) async {}
 
   @override
@@ -29,57 +32,52 @@ class _IndexAppState extends State<IndexApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background,
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: SafeArea(
-              child: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.white,
-            leading: IconButton(
-                icon: const Icon(
-                  Icons.account_circle,
-                  size: 30,
-                ),
-                color: AppTheme.primary,
-                onPressed: () => {}),
-          ))),
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: pageController,
-        children: const [
-          SizedBox(),
-          // DashboardIndex(),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
-        showSelectedLabels: false,
-        currentIndex: 0,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Container(
-                child: Icon(Icons.home),
-              ),
-              label: ''),
-          BottomNavigationBarItem(
-              icon: Container(
-                child: Icon(Icons.verified_user),
-              ),
-              label: ''),
-          BottomNavigationBarItem(
-              icon: Container(
-                child: Icon(Icons.share_location),
-              ),
-              label: ''),
-        ],
-        onTap: (index) {
-          pageController.animateToPage(index,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut);
-        },
-      ),
-    );
+        backgroundColor: AppTheme.background,
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(50),
+            child: SafeArea(
+                child: AppBar(
+              elevation: 0,
+              backgroundColor: Colors.white,
+              leading: IconButton(
+                  icon: const Icon(
+                    Icons.account_circle,
+                    size: 30,
+                  ),
+                  color: AppTheme.primary,
+                  onPressed: () => {accountOptions(context)}),
+            ))),
+        body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: pageController,
+          children: [
+            RequestProductsIndex(),
+            DashboardIndex(),
+            SizedBox(),
+          ],
+        ),
+        bottomNavigationBar: Obx(() {
+          return BottomNavigationBar(
+            currentIndex: navigation_controller.navigation_index,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.inventory_rounded,
+                  ),
+                  label: 'Request'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.dashboard_rounded), label: 'Products'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_cart_rounded), label: 'Cart'),
+            ],
+            onTap: (index) {
+              navigation_controller.navigation_index = index;
+              pageController.animateToPage(index,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOut);
+            },
+          );
+        }));
   }
 
   void accountOptions(BuildContext context) {
@@ -101,32 +99,6 @@ class _IndexAppState extends State<IndexApp> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          color: AppTheme.primary,
-                        ),
-                        child: IconButton(
-                            color: AppTheme.white,
-                            icon: const Icon(Icons.person),
-                            iconSize: 45.0,
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, '/perfil');
-                            }),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text('Perfil'),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 60,
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
                             color: AppTheme.primary,
@@ -136,8 +108,14 @@ class _IndexAppState extends State<IndexApp> {
                               icon: const Icon(Icons.power_settings_new),
                               iconSize: 45.0,
                               onPressed: () {
-                                ConfirmDialog('¿Desea cerrar sesión?', () {},
-                                    null, context);
+                                ConfirmDialog('¿Desea cerrar sesión?', () {
+                                  navigation_controller.logout().then((value) {
+                                    if (value) {
+                                      Navigator.pushReplacementNamed(
+                                          context, '/login');
+                                    }
+                                  });
+                                }, null, context);
                               })),
                       const SizedBox(
                         height: 10,

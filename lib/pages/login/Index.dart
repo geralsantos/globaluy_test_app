@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:globaluy_test_app/app/controller/LoginController.dart';
 import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
 import 'package:globaluy_test_app/utils/flutter/DialogLoading.dart';
 import 'package:globaluy_test_app/utils/dart/sharedPreferences.dart';
@@ -19,8 +21,8 @@ class LoginIndex extends StatefulWidget {
 
 class _LoginIndexState extends State<LoginIndex> {
   bool _showLoader = false, _showDialogResponse = false;
-  String labelPassword = 'Contraseña';
-
+  String labelPassword = 'Password';
+  final controller = Get.put(LoginController());
   @override
   void initState() {
     super.initState();
@@ -29,10 +31,6 @@ class _LoginIndexState extends State<LoginIndex> {
 
   Future initData() async {
     await sharedPrefs.open();
-  }
-
-  Future LoginGoogle() async {
-    GoogleSignIn().signIn();
   }
 
   @override
@@ -81,7 +79,9 @@ class _LoginIndexState extends State<LoginIndex> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8.0))),
                           child: TextFormField(
-                            onChanged: (val) {},
+                            onChanged: (val) {
+                              controller.email = val;
+                            },
                             style:
                                 const TextStyle(fontWeight: FontWeight.normal),
                             decoration: const InputDecoration(
@@ -109,7 +109,9 @@ class _LoginIndexState extends State<LoginIndex> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8.0))),
                           child: TextField(
-                            onChanged: (val) {},
+                            onChanged: (val) {
+                              controller.password = val;
+                            },
                             obscureText: true,
                             style:
                                 const TextStyle(fontWeight: FontWeight.normal),
@@ -153,7 +155,23 @@ class _LoginIndexState extends State<LoginIndex> {
                             padding: const EdgeInsets.symmetric(vertical: 12.0),
                             color: AppTheme.primary,
                             onPressed: () async {
-                              DialogLoading('Iniciando sesión', context);
+                              DialogLoading('Logging in', context);
+                              print('logging in');
+                              Future.delayed(Duration(milliseconds: 2000))
+                                  .then((v) {
+                                controller.login().then((value) {
+                                  Get.back();
+                                  print('value $value');
+                                  if (value) {
+                                    //success
+                                    Navigator.pushReplacementNamed(
+                                        context, '/dashboard');
+                                  } else {
+                                    DialogMessage('Incorrect credentials',
+                                        'error', context);
+                                  }
+                                });
+                              });
                             },
                             elevation: 2,
                             shape: const RoundedRectangleBorder(
@@ -216,7 +234,11 @@ class _LoginIndexState extends State<LoginIndex> {
                       ),
                       InkWell(
                         onTap: () {
-                          LoginGoogle();
+                          controller.loginGoogle().then((value) {
+                            if (value) {
+                              Navigator.pushNamed(context, '/dashboard');
+                            }
+                          });
                         },
                         child: Ink(
                           decoration: BoxDecoration(

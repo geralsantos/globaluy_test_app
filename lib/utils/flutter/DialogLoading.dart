@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
 
 void DialogLoading(String msj, BuildContext context,
@@ -84,7 +85,7 @@ void DialogMessage(String msj, String? estado, BuildContext context) {
                         padding: const EdgeInsets.symmetric(vertical: 9.0),
                         color: AppTheme.grey,
                         onPressed: () async {
-                          Navigator.pop(context);
+                          Get.back();
                         },
                         elevation: 1,
                         shape: const RoundedRectangleBorder(
@@ -217,7 +218,7 @@ void ConfirmDialog(
                       padding: const EdgeInsets.symmetric(vertical: 9.0),
                       color: AppTheme.primary,
                       onPressed: () async {
-                        Navigator.pop(context);
+                        Get.back();
                         if (cancel != null) {
                           cancel();
                         }

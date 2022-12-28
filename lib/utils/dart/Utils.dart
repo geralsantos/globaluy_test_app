@@ -35,6 +35,7 @@ class Utils {
       {Map<String, String>? headers, bool? auth = true}) async {
     Map<String, dynamic> result = new Map<String, dynamic>();
     sharedPreferences sharedPrefs = sharedPreferences();
+
     var response;
     try {
       var dataUser =
@@ -42,17 +43,21 @@ class Utils {
       Map<String, String> _headers = headers ?? {};
 
       if (dataUser["token"] == null && auth == true) {
-        result['estado'] = 'error';
+        result['status'] = 'error';
         result['logout'] = true;
         return result;
       }
       if (auth == true) {
-        _headers["Authorization"] = dataUser["token"];
+        _headers["Authorization"] = 'Bearer ${dataUser["token"]}';
       }
       switch (method) {
         case 'post':
           response =
               await http.post(Uri.parse(url), body: values, headers: _headers);
+          break;
+        case 'put':
+          response =
+              await http.put(Uri.parse(url), body: values, headers: _headers);
           break;
         case 'get':
           response = await http.get(Uri.parse(url), headers: _headers);
@@ -60,10 +65,9 @@ class Utils {
         default:
       }
       result = json.decode(response.body);
-      if (result != '' && result['estado'] != null) {
-        result['estado'] = result["estado"];
-        if (result["mensaje"] != null) {
-          result['mensaje'] = result["mensaje"];
+      if (result != '' && result['response'] != null) {
+        if (result["error"] != null) {
+          result['error'] = result["error"];
         }
         return result;
       }
@@ -71,11 +75,11 @@ class Utils {
     } catch (e) {
       print('ERROR httpBuilder ${e}');
       if (response.statusCode == 401) {
-        result['estado'] = 'error';
+        result['status'] = 'error';
         result['logout'] = true;
       } else {
-        result['estado'] = 'error';
-        result['mensaje'] = 'Hubo un error al conectarse con el servidor';
+        result['status'] = 'error';
+        result['error'] = 'Hubo un error al conectarse con el servidor';
       }
       return result;
     }

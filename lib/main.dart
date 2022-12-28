@@ -2,6 +2,7 @@ import 'package:globaluy_test_app/pages/IndexApp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:globaluy_test_app/pages/login/Index.dart';
@@ -9,6 +10,7 @@ import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
 import 'package:globaluy_test_app/pages/onboarding/Onboarding.dart';
 import 'package:globaluy_test_app/utils/dart/sharedPreferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:globaluy_test_app/app/controller/LoginController.dart';
 
 import 'routes/routes.dart';
 
@@ -23,7 +25,7 @@ void main() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((_) => initializeDateFormatting().then((value) {
-        runApp(const GetMaterialApp(home: MyApp()));
+        runApp(MyApp());
       }));
 }
 
@@ -38,10 +40,26 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    googleSignin.onCurrentUserChanged
+        .listen((GoogleSignInAccount? account) async {
+      if (account != null) {
+        // user logged
+        print('logged');
+      } else {
+        // user NOT logged
+        print('not logged');
+      }
+    });
   }
 
-  Future<String> verificarInicio() async {
-    var data = await sharedPrefs.read(sharedPrefs.dataUser, null);
+  Future<bool> verificarInicio() async {
+    var data = false;
+    data = await googleSignin.isSignedIn();
+
+    if (!data) {
+      // ignore: unrelated_type_equality_checks
+      data = await sharedPrefs.read(sharedPrefs.dataUser, false) != false;
+    }
     return data;
   }
 
@@ -51,7 +69,7 @@ class _MyAppState extends State<MyApp> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         );
 
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: AppTheme.primary,
@@ -68,9 +86,9 @@ class _MyAppState extends State<MyApp> {
       },
       home: FutureBuilder(
           future: verificarInicio(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.data != null) {
-              return IndexApp();
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (snapshot.data == true) {
+              return SafeArea(child: IndexApp());
             } else {
               return OnboardingScreen();
             }

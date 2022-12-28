@@ -5,8 +5,8 @@ import 'HexColor.dart';
 class AppTheme {
   AppTheme._();
 
-  static Color primary = HexColor('#30A4F7');
-  static Color secondary = HexColor('#2A2A2A');
+  static Color primary = HexColor('#2A2A2A');
+  static Color secondary = HexColor('#30A4F7');
   static Color third = HexColor('#0F206C');
   static Color fourth = HexColor('#0097CE');
   static Color fifth = HexColor('#EB0045');
@@ -79,7 +79,7 @@ class AppTheme {
   static const TextStyle title = TextStyle(
     // h6 -> title
     fontFamily: fontName,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
     fontSize: 16,
     letterSpacing: 0.18,
     color: darkerText,
@@ -96,7 +96,7 @@ class AppTheme {
   static const TextStyle subtitle = TextStyle(
     // subtitle2 -> subtitle
     fontFamily: fontName,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
     fontSize: 14,
     letterSpacing: -0.04,
     color: darkText,
