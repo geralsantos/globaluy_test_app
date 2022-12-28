@@ -11,6 +11,7 @@ class ProductModel with _$ProductModel {
     required String unit,
     required int stock,
     required String url,
+    @Default(0) int qty_product_requested,
   }) = _ProductModel;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>

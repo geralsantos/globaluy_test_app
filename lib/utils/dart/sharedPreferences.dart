@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class sharedPreferences {
   var pref;
   String dataUser = 'dataUser';
+  String dataProductsRequested = 'dataProductsRequested';
 
   Future<void> open() async {
     pref = await SharedPreferences.getInstance();

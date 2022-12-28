@@ -46,8 +46,8 @@ class ProductsIndex extends StatelessWidget {
               }
               return controller.loading.value
                   ? const CircularProgressIndicator()
-                  : SizedBox(
-                      height: size.height + 50,
+                  : Padding(
+                      padding: EdgeInsets.only(bottom: 80),
                       child: Column(
                         children: items,
                       ),

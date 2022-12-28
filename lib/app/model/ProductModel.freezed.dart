@@ -25,6 +25,7 @@ mixin _$ProductModel {
   String get unit => throw _privateConstructorUsedError;
   int get stock => throw _privateConstructorUsedError;
   String get url => throw _privateConstructorUsedError;
+  int get qty_product_requested => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,7 +39,13 @@ abstract class $ProductModelCopyWith<$Res> {
           ProductModel value, $Res Function(ProductModel) then) =
       _$ProductModelCopyWithImpl<$Res, ProductModel>;
   @useResult
-  $Res call({int? id, String description, String unit, int stock, String url});
+  $Res call(
+      {int? id,
+      String description,
+      String unit,
+      int stock,
+      String url,
+      int qty_product_requested});
 }
 
 /// @nodoc
@@ -59,6 +66,7 @@ class _$ProductModelCopyWithImpl<$Res, $Val extends ProductModel>
     Object? unit = null,
     Object? stock = null,
     Object? url = null,
+    Object? qty_product_requested = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -81,6 +89,10 @@ class _$ProductModelCopyWithImpl<$Res, $Val extends ProductModel>
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
+      qty_product_requested: null == qty_product_requested
+          ? _value.qty_product_requested
+          : qty_product_requested // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -93,7 +105,13 @@ abstract class _$$_ProductModelCopyWith<$Res>
       __$$_ProductModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String description, String unit, int stock, String url});
+  $Res call(
+      {int? id,
+      String description,
+      String unit,
+      int stock,
+      String url,
+      int qty_product_requested});
 }
 
 /// @nodoc
@@ -112,6 +130,7 @@ class __$$_ProductModelCopyWithImpl<$Res>
     Object? unit = null,
     Object? stock = null,
     Object? url = null,
+    Object? qty_product_requested = null,
   }) {
     return _then(_$_ProductModel(
       id: freezed == id
@@ -134,6 +153,10 @@ class __$$_ProductModelCopyWithImpl<$Res>
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
+      qty_product_requested: null == qty_product_requested
+          ? _value.qty_product_requested
+          : qty_product_requested // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -146,7 +169,8 @@ class _$_ProductModel implements _ProductModel {
       required this.description,
       required this.unit,
       required this.stock,
-      required this.url});
+      required this.url,
+      this.qty_product_requested = 0});
 
   factory _$_ProductModel.fromJson(Map<String, dynamic> json) =>
       _$$_ProductModelFromJson(json);
@@ -161,10 +185,13 @@ class _$_ProductModel implements _ProductModel {
   final int stock;
   @override
   final String url;
+  @override
+  @JsonKey()
+  final int qty_product_requested;
 
   @override
   String toString() {
-    return 'ProductModel(id: $id, description: $description, unit: $unit, stock: $stock, url: $url)';
+    return 'ProductModel(id: $id, description: $description, unit: $unit, stock: $stock, url: $url, qty_product_requested: $qty_product_requested)';
   }
 
   @override
@@ -177,13 +204,15 @@ class _$_ProductModel implements _ProductModel {
                 other.description == description) &&
             (identical(other.unit, unit) || other.unit == unit) &&
             (identical(other.stock, stock) || other.stock == stock) &&
-            (identical(other.url, url) || other.url == url));
+            (identical(other.url, url) || other.url == url) &&
+            (identical(other.qty_product_requested, qty_product_requested) ||
+                other.qty_product_requested == qty_product_requested));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, description, unit, stock, url);
+  int get hashCode => Object.hash(
+      runtimeType, id, description, unit, stock, url, qty_product_requested);
 
   @JsonKey(ignore: true)
   @override
@@ -205,7 +234,8 @@ abstract class _ProductModel implements ProductModel {
       required final String description,
       required final String unit,
       required final int stock,
-      required final String url}) = _$_ProductModel;
+      required final String url,
+      final int qty_product_requested}) = _$_ProductModel;
 
   factory _ProductModel.fromJson(Map<String, dynamic> json) =
       _$_ProductModel.fromJson;
@@ -220,6 +250,8 @@ abstract class _ProductModel implements ProductModel {
   int get stock;
   @override
   String get url;
+  @override
+  int get qty_product_requested;
   @override
   @JsonKey(ignore: true)
   _$$_ProductModelCopyWith<_$_ProductModel> get copyWith =>

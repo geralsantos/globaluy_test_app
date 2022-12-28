@@ -18,7 +18,7 @@ class IndexApp extends StatefulWidget {
 
 class _IndexAppState extends State<IndexApp> {
   bool permission = false;
-  PageController pageController = PageController(initialPage: 1);
+  PageController pageController = PageController(initialPage: 0);
   NavigationController navigation_controller = NavigationController();
   void initAsync(BuildContext context) async {}
 
@@ -51,7 +51,10 @@ class _IndexAppState extends State<IndexApp> {
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           children: [
-            RequestProductsIndex(),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: RequestProductsIndex(),
+            ),
             DashboardIndex(),
             SizedBox(),
           ],
@@ -108,7 +111,7 @@ class _IndexAppState extends State<IndexApp> {
                               icon: const Icon(Icons.power_settings_new),
                               iconSize: 45.0,
                               onPressed: () {
-                                ConfirmDialog('¿Desea cerrar sesión?', () {
+                                ConfirmDialog('¿Do you want to log out?', () {
                                   navigation_controller.logout().then((value) {
                                     if (value) {
                                       Navigator.pushReplacementNamed(

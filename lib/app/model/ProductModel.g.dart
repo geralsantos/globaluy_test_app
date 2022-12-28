@@ -13,6 +13,7 @@ _$_ProductModel _$$_ProductModelFromJson(Map<String, dynamic> json) =>
       unit: json['unit'] as String,
       stock: json['stock'] as int,
       url: json['url'] as String,
+      qty_product_requested: json['qty_product_requested'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$$_ProductModelToJson(_$_ProductModel instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$_ProductModelToJson(_$_ProductModel instance) =>
       'unit': instance.unit,
       'stock': instance.stock,
       'url': instance.url,
+      'qty_product_requested': instance.qty_product_requested,
     };
