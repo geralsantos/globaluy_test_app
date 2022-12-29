@@ -30,19 +30,35 @@ class _ProductsRequestedIndexState extends State<ProductsRequestedIndex> {
 
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: AppTheme.primary,
-          label: Text('Process my order'),
-          onPressed: () {
-            // ConfirmDialog('¿ Send the order ?', () {
-            //   controller.logout().then((value) {
-            //     if (value) {
-            //       Navigator.pushReplacementNamed(context, '/login');
-            //     }
-            //   });
-            // }, null, context);
-          },
-        ),
+        floatingActionButton: Obx(() {
+          if (!controller.products_requested.isEmpty) {
+            return FloatingActionButton.extended(
+              backgroundColor: AppTheme.primary,
+              label: Text('Process my order'),
+              onPressed: () {
+                ConfirmDialog('¿ Send the order ?', () {
+                  DialogLoading('Processing order', context);
+                  controller.sendOrder().then((value) {
+                    Get.back();
+                    if (value) {
+                      SnackBarMessage(context,
+                          isSuccess: true,
+                          message: 'Order processed successfully');
+                    } else {
+                      SnackBarMessage(context,
+                          message: 'The order could not be processed');
+                    }
+                    Future.delayed(const Duration(milliseconds: 300))
+                        .then((value) {
+                      Get.back();
+                    });
+                  });
+                }, null, context);
+              },
+            );
+          }
+          return SizedBox();
+        }),
         body: SafeArea(
             child: Padding(
                 padding: EdgeInsets.all(15),

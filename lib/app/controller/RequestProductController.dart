@@ -19,7 +19,6 @@ class RequestProductController extends GetxController {
   void onReady() {
     // TODO: implement onReady
     super.onReady();
-    getProductsRequested();
   }
 
   /// It gets the products requested from the server and sets the loading value to true while it's
@@ -34,6 +33,7 @@ class RequestProductController extends GetxController {
     products_requested = await RequestProductService().getProductsRequested();
     List<dynamic> sp_products_requested = jsonDecode(
         await sharedPrefs.read(sharedPrefs.dataProductsRequested, '[]'));
+    qty_product_requested.value = 0;
     if (!sp_products_requested.isEmpty) {
       for (var i = 0; i < products_requested.length; i++) {
         ProductModel item = products_requested[i];
@@ -44,9 +44,9 @@ class RequestProductController extends GetxController {
               int.parse(sp_products_requested[index_element]["qty"].toString());
           products_requested[i] =
               products_requested[i].copyWith(qty_product_requested: qty);
-          qty_product_requested.value = sp_products_requested.length;
         }
       }
+      qty_product_requested.value = sp_products_requested.length;
     }
     loading.value = false;
     update(['loading', 'products_requested']);
@@ -126,8 +126,6 @@ class RequestProductController extends GetxController {
     products_requested[index_element] =
         products_requested[index_element].copyWith(qty_product_requested: 0);
     qty_product_requested.value = sp_products_requested.length;
-    print('products_requested[index_element]');
-    print(products_requested[index_element]);
     update(['products_requested']);
   }
   // Future<List<Map<String, dynamic>>> getProductsRequested() async {

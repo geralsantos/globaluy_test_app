@@ -18,7 +18,6 @@ class ProductAvailableController extends GetxController {
   void onReady() {
     // TODO: implement onReady
     super.onReady();
-    getProductsAvailable();
   }
 
   Future<List<CompanyProductModel>> getProductsAvailable() async {

@@ -27,7 +27,7 @@ class sharedPreferences {
     return pref.getString(key) ?? def;
   }
 
-  void remove(String key) async {
+  Future remove(String key) async {
     if (pref == null) {
       await open();
     }

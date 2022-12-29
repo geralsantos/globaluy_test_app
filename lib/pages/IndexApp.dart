@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:globaluy_test_app/app/controller/NavigationController.dart';
 
 import 'package:globaluy_test_app/pages/dashboard/Index.dart';
+import 'package:globaluy_test_app/pages/orders/Index.dart';
 import 'package:globaluy_test_app/pages/request_products/Index.dart';
 import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
 import 'package:globaluy_test_app/utils/flutter/DialogLoading.dart';
@@ -50,13 +51,13 @@ class _IndexAppState extends State<IndexApp> {
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
-          children: [
+          children: const [
             Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
+              padding: EdgeInsets.only(left: 10, right: 10),
               child: RequestProductsIndex(),
             ),
             DashboardIndex(),
-            SizedBox(),
+            OrdersIndex(),
           ],
         ),
         bottomNavigationBar: Obx(() {
@@ -71,7 +72,7 @@ class _IndexAppState extends State<IndexApp> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.dashboard_rounded), label: 'Products'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart_rounded), label: 'Cart'),
+                  icon: Icon(Icons.view_in_ar), label: 'Orders'),
             ],
             onTap: (index) {
               navigation_controller.navigation_index = index;

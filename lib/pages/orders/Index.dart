@@ -5,14 +5,14 @@ import 'package:globaluy_test_app/app/model/CompanyProductModel.dart';
 import 'package:globaluy_test_app/app/model/ProductModel.dart';
 import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
 
-class RequestProductsIndex extends StatefulWidget {
-  const RequestProductsIndex({super.key});
+class OrdersIndex extends StatefulWidget {
+  const OrdersIndex({super.key});
 
   @override
-  State<RequestProductsIndex> createState() => _RequestProductsIndexState();
+  State<OrdersIndex> createState() => _OrdersIndexState();
 }
 
-class _RequestProductsIndexState extends State<RequestProductsIndex> {
+class _OrdersIndexState extends State<OrdersIndex> {
   @override
   void initState() {
     super.initState();
@@ -25,14 +25,6 @@ class _RequestProductsIndexState extends State<RequestProductsIndex> {
     ScrollController _controller = new ScrollController();
 
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppTheme.primary,
-        label: Text('Check my order'),
-        onPressed: () {
-          Navigator.pushNamed(context, '/products_requested');
-        },
-      ),
       body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
@@ -40,47 +32,17 @@ class _RequestProductsIndexState extends State<RequestProductsIndex> {
               Padding(
                 padding: const EdgeInsets.only(top: 10, right: 8),
                 child: Row(
-                  children: [
-                    const Expanded(
+                  children: const [
+                    Expanded(
                       child: Padding(
                           padding: EdgeInsets.all(10),
                           child: Text(
-                            'Request products',
+                            'Orders',
                             overflow: TextOverflow.ellipsis,
                             softWrap: false,
                             style: AppTheme.title,
                           )),
                     ),
-                    Ink(
-                      decoration: BoxDecoration(
-                        color: AppTheme.darkText,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/products_requested');
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 8, right: 8, top: 5, bottom: 5),
-                          child: Row(children: [
-                            Obx(
-                              () => Text(
-                                '${requestProductController.qty_product_requested.value}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            const Icon(
-                              Icons.shopping_cart_rounded,
-                              color: Colors.white,
-                            )
-                          ]),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),

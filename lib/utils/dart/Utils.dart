@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:globaluy_test_app/app/exceptions/AuthException.dart';
 import 'package:http/http.dart' as http;
 import 'package:globaluy_test_app/utils/dart/sharedPreferences.dart';
 import 'package:globaluy_test_app/utils/flutter/DialogLoading.dart';
@@ -65,6 +66,7 @@ class Utils {
         default:
       }
       result = json.decode(response.body);
+
       if (result != '' && result['response'] != null) {
         if (result["error"] != null) {
           result['error'] = result["error"];

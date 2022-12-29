@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:globaluy_test_app/app/controller/RequestProductController.dart';
 import 'package:globaluy_test_app/app/model/ProductModel.dart';
+import 'package:globaluy_test_app/app/services/RequestedProductService.dart';
 import 'package:globaluy_test_app/utils/dart/sharedPreferences.dart';
 
 class RequestedProductController extends GetxController {
@@ -63,10 +64,22 @@ class RequestedProductController extends GetxController {
 
     update(['products_requested']);
   }
-  // Future<List<Map<String, dynamic>>> getProductsRequested() async {
-  //   loading.value = true;
-  //   products_requested = await RequestProductService().getProductsRequested();
-  //   loading.value = false;
-  //   return products_requested;
-  // }
+
+  Future<bool> sendOrder() async {
+    //loading.value = true;
+    sharedPreferences sharedPrefs = sharedPreferences();
+    List<dynamic> sp_products_requested = jsonDecode(
+        await sharedPrefs.read(sharedPrefs.dataProductsRequested, '[]'));
+    bool updated = await RequestedProductService().sendOrder(
+      products: sp_products_requested,
+    );
+    if (updated) {
+      await sharedPrefs.remove(sharedPrefs.dataProductsRequested);
+      getProductsRequested();
+      requestProductController.getProductsRequested();
+    }
+    //loading.value = false;
+
+    return updated;
+  }
 }

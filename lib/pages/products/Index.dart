@@ -9,9 +9,21 @@ import 'package:globaluy_test_app/utils/flutter/ButtonField.dart';
 import 'package:globaluy_test_app/utils/flutter/DialogLoading.dart';
 import 'package:globaluy_test_app/utils/flutter/SnackBarMessage.dart';
 
-class ProductsIndex extends StatelessWidget {
-  ProductsIndex({super.key});
+class ProductsIndex extends StatefulWidget {
+  const ProductsIndex({super.key});
+
+  @override
+  State<ProductsIndex> createState() => _ProductsIndexState();
+}
+
+class _ProductsIndexState extends State<ProductsIndex> {
   final controller = Get.put(ProductAvailableController());
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller.getProductsAvailable();
+  }
 
   @override
   Widget build(BuildContext context) {
