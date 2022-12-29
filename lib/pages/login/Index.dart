@@ -9,7 +9,6 @@ import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
 import 'package:globaluy_test_app/utils/flutter/DialogLoading.dart';
 import 'package:globaluy_test_app/utils/dart/sharedPreferences.dart';
 import 'package:globaluy_test_app/utils/flutter/HexColor.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 sharedPreferences sharedPrefs = new sharedPreferences();
 
@@ -25,8 +24,14 @@ class _LoginIndexState extends State<LoginIndex> {
   final controller = Get.put(LoginController());
   @override
   void initState() {
+    Get.delete<LoginController>();
     super.initState();
     initData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future initData() async {
@@ -102,41 +107,48 @@ class _LoginIndexState extends State<LoginIndex> {
                                 contentPadding: EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 16.0)),
                           )),
-                      Card(
-                          margin: const EdgeInsets.only(
-                              left: 30, right: 30, top: 20),
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8.0))),
-                          child: TextField(
-                            onChanged: (val) {
-                              controller.password = val;
-                            },
-                            obscureText: true,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal),
-                            decoration: InputDecoration(
-                                prefixIcon: const Icon(
-                                  Icons.lock,
-                                  color: Colors.black26,
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () => {},
-                                  icon: const Icon(Icons.visibility),
-                                  color: Colors.black45,
-                                ),
-                                hintText: labelPassword,
-                                hintStyle: const TextStyle(
-                                  color: Colors.black54,
-                                ),
-                                fillColor: Colors.white,
-                                border: const OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8.0))),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0, vertical: 16.0)),
-                          )),
+                      Obx(() {
+                        return Card(
+                            margin: const EdgeInsets.only(
+                                left: 30, right: 30, top: 20),
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8.0))),
+                            child: TextField(
+                              onChanged: (val) {
+                                controller.password = val;
+                              },
+                              obscureText: controller.password_obscure_text,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.normal),
+                              decoration: InputDecoration(
+                                  prefixIcon: const Icon(
+                                    Icons.lock,
+                                    color: Colors.black26,
+                                  ),
+                                  suffixIcon: IconButton(
+                                    onPressed: () => {
+                                      controller.password_obscure_text =
+                                          !controller.password_obscure_text
+                                    },
+                                    icon: Icon(controller.password_obscure_text
+                                        ? Icons.visibility
+                                        : Icons.visibility_off),
+                                    color: Colors.black45,
+                                  ),
+                                  hintText: labelPassword,
+                                  hintStyle: const TextStyle(
+                                    color: Colors.black54,
+                                  ),
+                                  fillColor: Colors.white,
+                                  border: const OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(8.0))),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 16.0)),
+                            ));
+                      }),
                       Row(children: [
                         const Spacer(),
                         Container(
@@ -156,19 +168,19 @@ class _LoginIndexState extends State<LoginIndex> {
                             color: AppTheme.primary,
                             onPressed: () async {
                               DialogLoading('Logging in', context);
-                              print('logging in');
+
                               Future.delayed(Duration(milliseconds: 2000))
                                   .then((v) {
                                 controller.login().then((value) {
                                   Get.back();
-                                  print('value $value');
+
                                   if (value) {
                                     //success
                                     Navigator.pushReplacementNamed(
                                         context, '/dashboard');
                                   } else {
-                                    DialogMessage('Incorrect credentials',
-                                        'error', context);
+                                    DialogMessage(
+                                        'Login failed', 'error', context);
                                   }
                                 });
                               });
@@ -234,11 +246,13 @@ class _LoginIndexState extends State<LoginIndex> {
                       ),
                       InkWell(
                         onTap: () {
-                          controller.loginGoogle().then((value) {
-                            if (value) {
-                              Navigator.pushNamed(context, '/dashboard');
-                            }
-                          });
+                          try {
+                            controller.loginGoogle().then((value) {
+                              if (value) {
+                                Navigator.pushNamed(context, '/dashboard');
+                              }
+                            }).catchError((err) {});
+                          } catch (e) {}
                         },
                         child: Ink(
                           decoration: BoxDecoration(

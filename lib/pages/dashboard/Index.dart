@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:globaluy_test_app/app/exceptions/AuthException.dart';
 import 'package:globaluy_test_app/pages/products/Index.dart';
-import 'package:globaluy_test_app/utils/dart/Utils.dart';
 import 'package:globaluy_test_app/utils/dart/sharedPreferences.dart';
 
 class DashboardIndex extends StatefulWidget {

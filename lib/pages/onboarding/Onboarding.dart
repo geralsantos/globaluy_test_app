@@ -34,9 +34,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void login() {
-    /* Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => LoginThreePage()));*/
-    // Navigator.pushReplacementNamed(context, '/indexApp');
     Navigator.pushReplacementNamed(context, '/login');
   }
 
@@ -179,41 +176,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: _buildPageIndicator(),
-                ) /*,
-                _currentPage != _numPages - 1
-                    ? Expanded(
-                        child: Align(
-                          alignment: FractionalOffset.bottomRight,
-                          child: FlatButton(
-                            onPressed: () {
-                              _pageController.nextPage(
-                                duration: Duration(milliseconds: 500),
-                                curve: Curves.ease,
-                              );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text(
-                                  'Siguiente',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 22.0,
-                                  ),
-                                ),
-                                SizedBox(width: 10.0),
-                                Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.white,
-                                  size: 30.0,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    : Text(''),*/
+                )
               ],
             ),
           ),
@@ -232,7 +195,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     decoration: BoxDecoration(border: Border.all()),
                     child: const Center(
                       child: Text(
-                        'Iniciar sesión',
+                        'Login',
                         style: TextStyle(
                           color: Color(0xFF5B16D0),
                           fontSize: 20.0,

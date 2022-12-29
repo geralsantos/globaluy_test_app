@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -14,6 +15,11 @@ class Utils {
     return rootBundle.loadString('lib/app/db.json');
   }
 
+  /// It takes the value of the `APP_ENV` variable from the `.env` file and uses it to determine which
+  /// API URL to use
+  ///
+  /// Returns:
+  ///   A Map<String, String>
   static Map<String, String> getEnvParams() {
     var result = Map<String, String>();
     switch (dotenv.env["APP_ENV"]) {
@@ -31,6 +37,17 @@ class Utils {
     return result;
   }
 
+  /// It's a function that makes a request to the server and returns a map with the response
+  ///
+  /// Args:
+  ///   method (String): The HTTP method to use.
+  ///   url (String): The url of the API
+  ///   values (Map<String, dynamic>): The data to be sent to the server.
+  ///   headers (Map<String, String>): {'Content-Type': 'application/json'}
+  ///   auth (bool): If the request requires authentication or not. Defaults to true
+  ///
+  /// Returns:
+  ///   A Future<Map<String, dynamic>>
   static Future<Map<String, dynamic>> httpBuilder(
       String method, String url, Map<String, dynamic>? values,
       {Map<String, String>? headers, bool? auth = true}) async {
@@ -51,6 +68,7 @@ class Utils {
       if (auth == true) {
         _headers["Authorization"] = 'Bearer ${dataUser["token"]}';
       }
+
       switch (method) {
         case 'post':
           response =
@@ -65,6 +83,7 @@ class Utils {
           break;
         default:
       }
+
       result = json.decode(response.body);
 
       if (result != '' && result['response'] != null) {
@@ -75,7 +94,6 @@ class Utils {
       }
       throw Exception();
     } catch (e) {
-      print('ERROR httpBuilder ${e}');
       if (response.statusCode == 401) {
         result['status'] = 'error';
         result['logout'] = true;
@@ -113,5 +131,13 @@ class Utils {
     result = datetime.toUtc().subtract(const Duration(hours: 3));
 
     return result;
+  }
+
+  static String getRandomString(int length) {
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    return String.fromCharCodes(Iterable.generate(
+        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
   }
 }

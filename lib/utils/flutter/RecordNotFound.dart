@@ -9,7 +9,7 @@ class RecordNotFound extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: size.height - 150,
+      height: size.height - 220,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

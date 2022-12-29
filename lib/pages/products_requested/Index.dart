@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:globaluy_test_app/app/controller/RequestedProductController.dart';
-import 'package:globaluy_test_app/app/model/CompanyProductModel.dart';
-import 'package:globaluy_test_app/app/model/ProductModel.dart';
 import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
 import 'package:globaluy_test_app/utils/flutter/DialogLoading.dart';
 import 'package:globaluy_test_app/utils/flutter/RecordNotFound.dart';
@@ -34,7 +32,7 @@ class _ProductsRequestedIndexState extends State<ProductsRequestedIndex> {
           if (!controller.products_requested.isEmpty) {
             return FloatingActionButton.extended(
               backgroundColor: AppTheme.primary,
-              label: Text('Process my order'),
+              label: Text('Send my order'),
               onPressed: () {
                 ConfirmDialog('¿ Send the order ?', () {
                   DialogLoading('Processing order', context);
@@ -149,7 +147,7 @@ class _ProductsRequestedIndexState extends State<ProductsRequestedIndex> {
                           children: [
                             Text(
                               item["description"],
-                              style: AppTheme.subtitle,
+                              style: AppTheme.title,
                             ),
                             const Spacer(),
                             Row(

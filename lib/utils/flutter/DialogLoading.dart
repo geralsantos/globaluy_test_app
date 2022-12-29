@@ -50,8 +50,8 @@ void DialogLoading(String msj, BuildContext context,
 
 void DialogMessage(String msj, String? estado, BuildContext context) {
   final size = MediaQuery.of(context).size;
-  Color color = AppTheme.error;
-  IconData icon = Icons.error;
+  Color color = AppTheme.warning;
+  IconData icon = Icons.info;
   if (estado == "success") {
     color = AppTheme.success;
     icon = Icons.check_circle_rounded;
@@ -59,7 +59,6 @@ void DialogMessage(String msj, String? estado, BuildContext context) {
   showDialog(
       context: context,
       builder: (BuildContext bc) {
-        print('msj.length ${msj.length}');
         return AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),

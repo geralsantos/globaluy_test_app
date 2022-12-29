@@ -3,6 +3,13 @@ import 'dart:convert';
 import 'package:globaluy_test_app/utils/dart/Utils.dart';
 
 class RequestedProductService {
+  /// It takes a list of products, converts it to a json string, and sends it to the server
+  ///
+  /// Args:
+  ///   products (List<dynamic>): List of products to be sent to the server.
+  ///
+  /// Returns:
+  ///   A Future<bool>
   Future<bool> sendOrder({
     required List<dynamic> products,
   }) async {

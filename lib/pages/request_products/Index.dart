@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:globaluy_test_app/app/controller/RequestProductController.dart';
-import 'package:globaluy_test_app/app/model/CompanyProductModel.dart';
 import 'package:globaluy_test_app/app/model/ProductModel.dart';
 import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
+import 'package:globaluy_test_app/utils/flutter/ShimmerProduct.dart';
 
 class RequestProductsIndex extends StatefulWidget {
   const RequestProductsIndex({super.key});
@@ -13,6 +13,15 @@ class RequestProductsIndex extends StatefulWidget {
 }
 
 class _RequestProductsIndexState extends State<RequestProductsIndex> {
+  List<Widget> shimmerProducts = [
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+  ];
   @override
   void initState() {
     super.initState();
@@ -97,7 +106,12 @@ class _RequestProductsIndexState extends State<RequestProductsIndex> {
                       ));
                     }
                     return requestProductController.loading.value
-                        ? const CircularProgressIndicator()
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 80),
+                            child: Column(
+                              children: shimmerProducts,
+                            ),
+                          )
                         : Padding(
                             padding: const EdgeInsets.only(bottom: 80),
                             child: Column(
@@ -151,7 +165,7 @@ class _RequestProductsIndexState extends State<RequestProductsIndex> {
                           children: [
                             Text(
                               item.description,
-                              style: AppTheme.subtitle,
+                              style: AppTheme.title,
                             ),
                             const Spacer(),
                             Row(

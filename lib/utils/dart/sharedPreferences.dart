@@ -34,7 +34,7 @@ class sharedPreferences {
     pref.remove(key);
   }
 
-  void clearSesion() async {
+  Future clearSesion() async {
     if (pref == null) {
       await open();
     }

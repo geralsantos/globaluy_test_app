@@ -53,6 +53,10 @@ class RequestProductController extends GetxController {
     return products_requested;
   }
 
+  /// It removes a product from the list of products requested by the user
+  ///
+  /// Args:
+  ///   product_id: The id of the product to be added to the cart
   Future removeQtyProductRequest({product_id}) async {
     sharedPreferences sharedPrefs = sharedPreferences();
     List<dynamic> sp_products_requested = jsonDecode(
@@ -80,9 +84,12 @@ class RequestProductController extends GetxController {
     update(['products_requested']);
   }
 
+  /// It adds a product to the list of products requested
+  ///
+  /// Args:
+  ///   product_item (ProductModel): ProductModel
   Future addQtyProductRequest({required ProductModel product_item}) async {
     sharedPreferences sharedPrefs = sharedPreferences();
-    // sharedPrefs.remove(sharedPrefs.dataProductsRequested);
     List<dynamic> sp_products_requested = jsonDecode(
         await sharedPrefs.read(sharedPrefs.dataProductsRequested, '[]'));
 
@@ -116,6 +123,10 @@ class RequestProductController extends GetxController {
     update(['products_requested']);
   }
 
+  /// It removes a product from the list of products requested
+  ///
+  /// Args:
+  ///   product_id: The id of the product to be removed from the list.
   Future removeProduct({product_id}) async {
     sharedPreferences sharedPrefs = sharedPreferences();
     List<dynamic> sp_products_requested = jsonDecode(
@@ -128,10 +139,4 @@ class RequestProductController extends GetxController {
     qty_product_requested.value = sp_products_requested.length;
     update(['products_requested']);
   }
-  // Future<List<Map<String, dynamic>>> getProductsRequested() async {
-  //   loading.value = true;
-  //   products_requested = await RequestProductService().getProductsRequested();
-  //   loading.value = false;
-  //   return products_requested;
-  // }
 }

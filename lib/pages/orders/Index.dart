@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:globaluy_test_app/app/controller/RequestProductController.dart';
-import 'package:globaluy_test_app/app/model/CompanyProductModel.dart';
-import 'package:globaluy_test_app/app/model/ProductModel.dart';
+import 'package:globaluy_test_app/app/controller/OrderController.dart';
+import 'package:globaluy_test_app/app/model/OrderModel.dart';
 import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
+import 'package:globaluy_test_app/utils/flutter/DialogLoading.dart';
+import 'package:globaluy_test_app/utils/flutter/RecordNotFound.dart';
+import 'package:globaluy_test_app/utils/flutter/ShimmerProduct.dart';
+import 'package:globaluy_test_app/utils/flutter/SnackBarMessage.dart';
+import 'package:intl/intl.dart';
 
 class OrdersIndex extends StatefulWidget {
   const OrdersIndex({super.key});
@@ -13,10 +17,19 @@ class OrdersIndex extends StatefulWidget {
 }
 
 class _OrdersIndexState extends State<OrdersIndex> {
+  List<Widget> shimmerProducts = [
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+  ];
   @override
   void initState() {
     super.initState();
-    requestProductController.getProductsRequested();
+    orderController.getOrders();
   }
 
   @override
@@ -28,6 +41,7 @@ class _OrdersIndexState extends State<OrdersIndex> {
       body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 10, right: 8),
@@ -46,33 +60,68 @@ class _OrdersIndexState extends State<OrdersIndex> {
                   ],
                 ),
               ),
-              GetBuilder<RequestProductController>(
-                  init: RequestProductController(),
-                  id: 'products_requested',
+              GetBuilder<OrderController>(
+                  init: OrderController(),
+                  id: 'order_items',
                   builder: (_) {
                     List<Widget> items = [];
-                    for (var element
-                        in requestProductController.products_requested) {
+                    for (var element in orderController.order_items) {
                       items.add(Padding(
                         padding: const EdgeInsets.all(6),
                         child: ItemProduct(context, element),
                       ));
                     }
-                    return requestProductController.loading.value
-                        ? const CircularProgressIndicator()
-                        : Padding(
+                    return orderController.loading.value
+                        ? Padding(
                             padding: const EdgeInsets.only(bottom: 80),
                             child: Column(
-                              children: items,
+                              children: shimmerProducts,
                             ),
-                          );
-                  })
+                          )
+                        : items.isEmpty
+                            ? const RecordNotFound()
+                            : Column(
+                                children: [
+                                  const Text('Click one order to process it'),
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 80),
+                                    child: Column(
+                                      children: items,
+                                    ),
+                                  )
+                                ],
+                              );
+                  }),
+              // Obx(() {
+              //   List<Widget> items = [];
+              //   for (var element in orderController.order_items) {
+              //     items.add(Padding(
+              //       padding: const EdgeInsets.all(6),
+              //       child: ItemProduct(context, element),
+              //     ));
+              //   }
+              //   return orderController.loading.value
+              //       ? const CircularProgressIndicator()
+              //       : items.isEmpty
+              //           ? const RecordNotFound()
+              //           : Column(
+              //               children: [
+              //                 const Text('Click one order to process it'),
+              //                 Padding(
+              //                   padding: EdgeInsets.only(bottom: 80),
+              //                   child: Column(
+              //                     children: items,
+              //                   ),
+              //                 )
+              //               ],
+              //             );
+              // })
             ],
           )),
     );
   }
 
-  Widget ItemProduct(BuildContext context, ProductModel item) {
+  Widget ItemProduct(BuildContext context, OrderModel item) {
     final size = MediaQuery.of(context).size;
     return Ink(
       decoration: BoxDecoration(
@@ -82,7 +131,12 @@ class _OrdersIndexState extends State<OrdersIndex> {
       ),
       child: InkWell(
           borderRadius: BorderRadius.circular(15),
-          onTap: () async {},
+          onTap: () async {
+            if (OrderModel.getStatusString(item.status) != 'Pending') {
+              return;
+            }
+            moreOptions(context, item);
+          },
           child: Padding(
             padding:
                 const EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 12),
@@ -93,108 +147,61 @@ class _OrdersIndexState extends State<OrdersIndex> {
                 Expanded(
                     child: Container(
                   width: size.width - 170,
-                  height: 100,
+                  height: 130,
                   padding: const EdgeInsets.only(right: 3),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: 80,
-                        child: Image.network(
-                          item.url,
+                        child: Icon(
+                          Icons.view_in_ar,
+                          size: 80,
                         ),
                       ),
                       const SizedBox(
-                        width: 12,
+                        width: 20,
                       ),
                       Expanded(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              item.description,
-                              style: AppTheme.subtitle,
+                              'Pedido #${item.id}',
+                              style: AppTheme.title,
                             ),
                             const Spacer(),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Column(
-                                  children: [
-                                    Text('${item.stock} qty'),
-                                    Text(item.unit),
-                                  ],
-                                ),
-                                const Spacer(),
-                                SizedBox(
-                                  child: Row(
-                                    children: [
-                                      Ink(
-                                          decoration: BoxDecoration(
-                                            color: AppTheme.primary,
-                                            borderRadius:
-                                                BorderRadius.circular(7),
-                                          ),
-                                          child: InkWell(
-                                            onTap: () {
-                                              if (item.qty_product_requested ==
-                                                  0) {
-                                                return;
-                                              }
-                                              requestProductController
-                                                  .removeQtyProductRequest(
-                                                      product_id: item.id);
-                                            },
-                                            borderRadius:
-                                                BorderRadius.circular(7),
-                                            child: const SizedBox(
-                                              width: 40,
-                                              height: 40,
-                                              child: Icon(
-                                                Icons.remove_rounded,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          )),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        child: Text(
-                                            '${item.qty_product_requested}'),
-                                      ),
-                                      Ink(
-                                          decoration: BoxDecoration(
-                                            color: AppTheme.primary,
-                                            borderRadius:
-                                                BorderRadius.circular(7),
-                                          ),
-                                          child: InkWell(
-                                            onTap: () {
-                                              if (item.qty_product_requested ==
-                                                  item.stock) {
-                                                return;
-                                              }
-                                              requestProductController
-                                                  .addQtyProductRequest(
-                                                      product_item: item);
-                                            },
-                                            borderRadius:
-                                                BorderRadius.circular(7),
-                                            child: const SizedBox(
-                                              width: 40,
-                                              height: 40,
-                                              child: Icon(
-                                                Icons.add_rounded,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          )),
-                                    ],
-                                  ),
-                                )
-                              ],
+                            Text(
+                                'Realizado el ${DateFormat.yMd().add_Hm().format(DateTime.parse(item.date_created.toString()))}'),
+                            Text(
+                              '${item.user.full_name}',
                             ),
+                            Text('${item.user.user_code}'),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color:
+                                        OrderModel.getStatusColor(item.status),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: const EdgeInsets.only(
+                                      left: 8, right: 8, top: 5, bottom: 5),
+                                  child: Row(children: [
+                                    Text(
+                                      OrderModel.getStatusString(item.status),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ]),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       )
@@ -205,5 +212,76 @@ class _OrdersIndexState extends State<OrdersIndex> {
             ),
           )),
     );
+  }
+
+  void moreOptions(BuildContext context, OrderModel item) {
+    showModalBottomSheet<void>(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
+        ),
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 130,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                        child: Text(
+                      'Pedido #${item.id}',
+                      style: AppTheme.title,
+                    )),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: 200,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(12), // <-- Radius
+                            ),
+                            primary: AppTheme.primary),
+                        onPressed: () {
+                          if (OrderModel.getStatusString(item.status) !=
+                              'Pending') {
+                            return;
+                          }
+                          DialogLoading('Processing order', context);
+                          orderController.processOrder(item).then((value) {
+                            Get.back();
+
+                            if (value) {
+                              SnackBarMessage(context,
+                                  isSuccess: true,
+                                  message: 'Order processed successfully');
+                            } else {
+                              SnackBarMessage(context,
+                                  message: 'The order could not be processed');
+                            }
+                            Future.delayed(const Duration(milliseconds: 300))
+                                .then((value) {
+                              Get.back();
+                            });
+                          });
+                        },
+                        child: const Text(
+                          'Process order',
+                          style: TextStyle(fontSize: 13, color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

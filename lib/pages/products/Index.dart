@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:globaluy_test_app/app/controller/ProductAvailableController.dart';
 import 'package:globaluy_test_app/app/model/CompanyProductModel.dart';
-import 'package:globaluy_test_app/app/model/ProductModel.dart';
 import 'package:globaluy_test_app/utils/flutter/AppTheme.dart';
-import 'package:globaluy_test_app/utils/flutter/ButtonField.dart';
 import 'package:globaluy_test_app/utils/flutter/DialogLoading.dart';
+import 'package:globaluy_test_app/utils/flutter/RecordNotFound.dart';
+import 'package:globaluy_test_app/utils/flutter/ShimmerProduct.dart';
 import 'package:globaluy_test_app/utils/flutter/SnackBarMessage.dart';
 
 class ProductsIndex extends StatefulWidget {
@@ -18,6 +17,15 @@ class ProductsIndex extends StatefulWidget {
 
 class _ProductsIndexState extends State<ProductsIndex> {
   final controller = Get.put(ProductAvailableController());
+  List<Widget> shimmerProducts = [
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+    const ShimmerProduct(),
+  ];
   @override
   void initState() {
     // TODO: implement initState
@@ -48,23 +56,34 @@ class _ProductsIndexState extends State<ProductsIndex> {
                 ),
               ],
             ),
-            Obx(() {
-              List<Widget> items = [];
-              for (var element in controller.products_available) {
-                items.add(Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: ItemProduct(context, element),
-                ));
-              }
-              return controller.loading.value
-                  ? const CircularProgressIndicator()
-                  : Padding(
-                      padding: EdgeInsets.only(bottom: 80),
-                      child: Column(
-                        children: items,
-                      ),
-                    );
-            })
+            GetBuilder<ProductAvailableController>(
+                init: ProductAvailableController(),
+                id: 'products_available',
+                builder: (_) {
+                  List<Widget> items = [];
+                  for (var element
+                      in productAvailableController.products_available) {
+                    items.add(Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: ItemProduct(context, element),
+                    ));
+                  }
+                  return productAvailableController.loading.value
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 80),
+                          child: Column(
+                            children: shimmerProducts,
+                          ),
+                        )
+                      : items.isEmpty
+                          ? const RecordNotFound()
+                          : Padding(
+                              padding: const EdgeInsets.only(bottom: 80),
+                              child: Column(
+                                children: items,
+                              ),
+                            );
+                }),
           ],
         ));
   }
@@ -110,7 +129,7 @@ class _ProductsIndexState extends State<ProductsIndex> {
                           children: [
                             Text(
                               item.product.description,
-                              style: AppTheme.subtitle,
+                              style: AppTheme.title,
                             ),
                             const Spacer(),
                             Row(
@@ -237,7 +256,7 @@ class _ProductsIndexState extends State<ProductsIndex> {
                             )),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     SizedBox(
                       width: 200,
                       child: ElevatedButton(
@@ -272,8 +291,8 @@ class _ProductsIndexState extends State<ProductsIndex> {
                         },
                         child: Obx(() => Text(
                               'Remove ${controller.qty_product_removed.value} units',
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.white),
+                              style: const TextStyle(
+                                  fontSize: 13, color: Colors.white),
                             )),
                       ),
                     )

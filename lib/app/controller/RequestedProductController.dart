@@ -37,18 +37,14 @@ class RequestedProductController extends GetxController {
 
     products_requested = jsonDecode(
         await sharedPrefs.read(sharedPrefs.dataProductsRequested, '[]'));
-
-    // if (!sp_products_requested.isEmpty) {
-    //   for (var i = 0; i < sp_products_requested.length; i++) {
-    //     products_requested.add(sp_products_requested[i]);
-    //   }
-    // }
-    print('sp_products_requested.isEmpty');
-    print(products_requested);
     loading.value = false;
     update(['loading', 'products_requested']);
   }
 
+  /// It removes a product from the list of products requested
+  ///
+  /// Args:
+  ///   product_id: The id of the product to be removed
   Future removeProduct({product_id}) async {
     sharedPreferences sharedPrefs = sharedPreferences();
     List<dynamic> sp_products_requested = jsonDecode(
@@ -65,8 +61,12 @@ class RequestedProductController extends GetxController {
     update(['products_requested']);
   }
 
+  /// It gets a list of products from shared preferences, sends them to the server, and if the server
+  /// responds with a success, it removes the list from shared preferences
+  ///
+  /// Returns:
+  ///   A Future<bool>
   Future<bool> sendOrder() async {
-    //loading.value = true;
     sharedPreferences sharedPrefs = sharedPreferences();
     List<dynamic> sp_products_requested = jsonDecode(
         await sharedPrefs.read(sharedPrefs.dataProductsRequested, '[]'));
@@ -78,8 +78,6 @@ class RequestedProductController extends GetxController {
       getProductsRequested();
       requestProductController.getProductsRequested();
     }
-    //loading.value = false;
-
     return updated;
   }
 }

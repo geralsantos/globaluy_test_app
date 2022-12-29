@@ -5,6 +5,10 @@ import 'package:globaluy_test_app/utils/dart/Utils.dart';
 import 'package:globaluy_test_app/utils/dart/sharedPreferences.dart';
 
 class RequestProductService {
+  /// It makes a GET request to the server, and returns a list of ProductModel objects
+  ///
+  /// Returns:
+  ///   A list of ProductModel objects.
   Future<List<ProductModel>> getProductsRequested() async {
     final Map<String, dynamic> values = {};
     var envParams = Utils.getEnvParams();
@@ -16,8 +20,7 @@ class RequestProductService {
       for (var item in response["response"]) {
         list_product.add(ProductModel.fromJson(item));
       }
-      print('response list_product');
-      print(list_product);
+
       return list_product;
     }
     return [];

@@ -8,11 +8,10 @@ class NavigationController extends GetxController {
   get navigation_index => this._navigation_index.value;
 
   Future<bool> logout() async {
+    sharedPreferences sharedPrefs = new sharedPreferences();
+    sharedPrefs.clearSesion();
     if (await googleSignin.isSignedIn()) {
-      googleSignin.disconnect();
-    } else {
-      sharedPreferences sharedPrefs = new sharedPreferences();
-      sharedPrefs.clearSesion();
+      await googleSignin.disconnect();
     }
     return true;
   }

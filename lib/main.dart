@@ -44,10 +44,10 @@ class _MyAppState extends State<MyApp> {
         .listen((GoogleSignInAccount? account) async {
       if (account != null) {
         // user logged
-        print('logged');
+
       } else {
         // user NOT logged
-        print('not logged');
+
       }
     });
   }
@@ -55,7 +55,6 @@ class _MyAppState extends State<MyApp> {
   Future<bool> verificarInicio() async {
     var data = false;
     data = await googleSignin.isSignedIn();
-
     if (!data) {
       // ignore: unrelated_type_equality_checks
       data = await sharedPrefs.read(sharedPrefs.dataUser, false) != false;

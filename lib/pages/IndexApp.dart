@@ -19,7 +19,7 @@ class IndexApp extends StatefulWidget {
 
 class _IndexAppState extends State<IndexApp> {
   bool permission = false;
-  PageController pageController = PageController(initialPage: 0);
+  PageController pageController = PageController(initialPage: 1);
   NavigationController navigation_controller = NavigationController();
   void initAsync(BuildContext context) async {}
 
