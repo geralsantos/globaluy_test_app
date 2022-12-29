@@ -65,8 +65,8 @@ class _ProductsRequestedIndexState extends State<ProductsRequestedIndex> {
                     child: Column(
                       children: [
                         Row(
-                          children: const [
-                            Expanded(
+                          children: [
+                            const Expanded(
                               child: Padding(
                                   padding: EdgeInsets.all(10),
                                   child: Text(
@@ -75,6 +75,16 @@ class _ProductsRequestedIndexState extends State<ProductsRequestedIndex> {
                                     softWrap: false,
                                     style: AppTheme.title,
                                   )),
+                            ),
+                            Container(
+                              alignment: Alignment.topRight,
+                              child: IconButton(
+                                onPressed: () async {
+                                  Get.back();
+                                },
+                                icon: const Icon(Icons.arrow_back_outlined),
+                                color: AppTheme.primary,
+                              ),
                             ),
                           ],
                         ),

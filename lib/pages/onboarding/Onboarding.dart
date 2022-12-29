@@ -65,7 +65,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Container(
                   decoration: const BoxDecoration(),
                   alignment: Alignment.centerRight,
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       login();
                     },
